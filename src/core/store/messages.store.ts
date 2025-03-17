@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Firestore, addDoc, collection, query, orderBy, onSnapshot } from '@angular/fire/firestore';
 import { serverTimestamp } from 'firebase/firestore';
 import { catchError, from, of, tap, map } from 'rxjs';
+import { withStorage } from '@larscom/ngrx-signals-storage';
 
 export interface Message {
   id?: string;
@@ -33,6 +34,7 @@ const initialState: MessagesState = {
 @Injectable({ providedIn: 'root' })
 export class MessagesStore extends signalStore(
   withState(initialState),
+  // withStorage('auth-store', localStorage), // using this we can easily sync with localStorage
   withMethods(
     (store, firestore = inject(Firestore), snackBar = inject(MatSnackBar)) => ({
       submitMessage(message: Message) {
