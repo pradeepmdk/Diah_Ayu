@@ -37,15 +37,17 @@ export class MessagesComponent implements OnInit, OnDestroy {
   constructor(private dialog: MatDialog) {
     effect(() => {
       this.dataSource.data = this.messagesStore.messages();
-      if (this.paginator) {
-        this.dataSource.paginator = this.paginator;
-      }
+      console.log(this.dataSource.data);
+      setTimeout(() => {
+        if (this.paginator) {
+          this.dataSource.paginator = this.paginator;
+        }
+      });
     });
   }
 
   ngOnInit(): void {
     this.messagesStore.loadMessages();
-
   }
 
   ngAfterViewInit() {
