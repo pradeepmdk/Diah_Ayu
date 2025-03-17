@@ -9,3 +9,16 @@
   top: 20px;
   right: 20px;
 }
+
+.loading-spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 200px;
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+}

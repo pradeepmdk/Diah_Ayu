@@ -28,7 +28,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 export class MessageDialogComponent {
   messageForm: FormGroup;
   private messagesStore = inject(MessagesStore);
-  loading = this.messagesStore.loading;
+  submitting = this.messagesStore.submitting;
 
   constructor(
     private fb: FormBuilder,
@@ -43,7 +43,7 @@ export class MessageDialogComponent {
         setTimeout(() => {
           this.dialogRef.close();
           this.messagesStore.resetSuccess();
-        }, 500);
+        }, 100);
       }
     });
   

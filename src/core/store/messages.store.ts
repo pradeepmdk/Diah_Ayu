@@ -13,6 +13,7 @@ export interface Message {
 }
 
 export interface MessagesState {
+  submitting: boolean;
   loading: boolean;
   success: boolean;
   error: string | null;
@@ -22,6 +23,7 @@ export interface MessagesState {
 
 const initialState: MessagesState = {
   loading: false,
+  submitting: false,
   success: false,
   error: null,
   messages: [],
@@ -34,7 +36,7 @@ export class MessagesStore extends signalStore(
   withMethods(
     (store, firestore = inject(Firestore), snackBar = inject(MatSnackBar)) => ({
       submitMessage(message: Message) {
-        patchState(store, { loading: true, error: null, success: false });
+        patchState(store, { submitting: true, error: null, success: false });
 
         const messageData = {
           ...message,
@@ -44,7 +46,7 @@ export class MessagesStore extends signalStore(
         from(addDoc(collection(firestore, 'messages'), messageData)).pipe(
           tap(docRef => {
             patchState(store, {
-              loading: false,
+              submitting: false,
               success: true
             });
             
@@ -56,7 +58,7 @@ export class MessagesStore extends signalStore(
           }),
           catchError(error => {
             patchState(store, {
-              loading: false,
+              submitting: false,
               error: error.message || 'Failed to send message',
               success: false
             });
