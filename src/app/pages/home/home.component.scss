@@ -1,0 +1,28 @@
+.coming-soon-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 64px); 
+    width: 100%;
+    padding: 16px;
+    box-sizing: border-box;
+  }
+  
+  .coming-soon-card {
+    max-width: 400px;
+    text-align: center;
+    padding: 24px;
+  }
+  
+  .coming-soon-icon {
+    font-size: 64px;
+    height: 64px;
+    width: 64px;
+    margin: 24px 0;
+    color: var(--mat-primary-color);
+  }
+  
+  .coming-soon-text {
+    font-size: 18px;
+    margin-bottom: 24px;
+  }

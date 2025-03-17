@@ -22,3 +22,44 @@
   display: flex;
   justify-content: center;
 }
+
+
+.table-container {
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+  margin: 16px;
+  overflow: hidden;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  padding: 32px;
+}
+
+.full-width-table {
+  width: 100%;
+}
+
+th.mat-header-cell {
+  color: rgba(0, 0, 0, 0.87);
+  font-weight: 500;
+  font-size: 14px;
+}
+
+td.mat-cell, th.mat-header-cell {
+  padding: 0 16px;
+}
+
+tr.mat-row {
+  height: 48px;
+}
+
+tr.mat-header-row {
+  height: 56px;
+}
+
+.mat-mdc-header-cell, .mat-mdc-cell {
+  border-bottom-color: rgba(0, 0, 0, .12);
+}

@@ -10,6 +10,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DatePipe } from '@angular/common';
 import { MessagesStore } from '../../../../../core/store/messages.store';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSortModule } from '@angular/material/sort';
 
 @Component({
   selector: 'app-messages',
@@ -20,6 +22,8 @@ import { MatTableDataSource } from '@angular/material/table';
     MatTableModule,
     MatPaginatorModule,
     MatProgressSpinnerModule,
+    MatTooltipModule,
+    MatSortModule,
     DatePipe
   ],
   standalone: true,
@@ -61,6 +65,7 @@ export class MessagesComponent implements OnInit, OnDestroy {
   openDialog(): void {
     const dialogRef = this.dialog.open(MessageDialogComponent, {
       width: '500px',
+      panelClass: 'rounded-dialog'
     });
 
     dialogRef.afterClosed().subscribe((result) => {

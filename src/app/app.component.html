@@ -1,7 +1,27 @@
 <mat-toolbar color="primary">
-  <span>My App</span>
-  <span class="spacer"></span>
-  <a mat-button routerLink="/" routerLinkActive="active" class="nav-link">Home</a>
-  <a mat-button routerLink="/messages" routerLinkActive="active" class="nav-link">Messages</a>
+  <div class="toolbar-container">
+    <div class="brand-section">
+      <mat-icon class="app-logo" aria-hidden="false" aria-label="Message app">forum</mat-icon>
+      <span class="app-title">DiahAyu App</span>
+    </div>
+    
+    <span class="spacer"></span>
+    
+   <div class="nav-links">
+      <a mat-button routerLink="/" 
+         routerLinkActive="active" 
+         [routerLinkActiveOptions]="{exact: true}" 
+         class="nav-link">
+        <mat-icon class="nav-icon">home</mat-icon>
+        <span>Home</span>
+      </a>
+      <a mat-button routerLink="/messages" 
+         routerLinkActive="active" 
+         class="nav-link">
+        <mat-icon class="nav-icon">message</mat-icon>
+        <span> Messages</span>
+      </a>
+    </div>
+  </div>
 </mat-toolbar>
 <router-outlet></router-outlet>
