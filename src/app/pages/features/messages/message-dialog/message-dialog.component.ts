@@ -8,6 +8,8 @@ import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessagesStore } from '../../../../../core/store/messages.store';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { MessagesFacade } from '../../../../../core/store/messages.facade';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-message-dialog',
@@ -27,23 +29,30 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 })
 export class MessageDialogComponent {
   messageForm: FormGroup;
-  private messagesStore = inject(MessagesStore);
-  submitting = this.messagesStore.submitting;
-
+  submitting = false;
+  private destroy$ = new Subject<void>();
   constructor(
     private fb: FormBuilder,
-    private dialogRef: MatDialogRef<MessageDialogComponent>
+    private dialogRef: MatDialogRef<MessageDialogComponent>,
+    private messagesFacade: MessagesFacade
   ) {
     this.messageForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       message: ['', Validators.required]
     });  
-    effect(() => {
-      if (this.messagesStore.success()) {
-        setTimeout(() => {
-          this.dialogRef.close();
-          this.messagesStore.resetSuccess();
-        }, 100);
+
+    this.messagesFacade.submitting$
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(submitting => {
+      this.submitting = submitting;
+    });
+    
+  this.messagesFacade.success$
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(success => {
+      if (success) {
+        this.dialogRef.close();
+        this.messagesFacade.resetSuccess();
       }
     });
   
@@ -52,7 +61,7 @@ export class MessageDialogComponent {
   submitForm(): void {
     if (this.messageForm.valid) {
       console.log(this.messageForm.value);
-      this.messagesStore.submitMessage(this.messageForm.value);
+      this.messagesFacade.submitMessage(this.messageForm.value);
       // this.dialogRef.close(this.messageForm.value);
     }
   }

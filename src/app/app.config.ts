@@ -5,6 +5,9 @@ import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
+import { messagesFeatureKey, messagesReducer } from '../core/store/messages.reducer';
+import { MessagesEffects } from '../core/store/messages.effects';
+import { provideStoreDevtools } from '@ngrx/store-devtools';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -20,7 +23,10 @@ export const appConfig: ApplicationConfig = {
         measurementId: 'G-ETVCH7NDM9',
     })),
     provideFirestore(() => getFirestore()),
-    provideStore(),
-    provideEffects()
+    provideStore({
+      [messagesFeatureKey]: messagesReducer
+    }),
+    provideEffects([MessagesEffects]),
+    provideStoreDevtools({ name: 'NgRx Store' }),
 ],
 };

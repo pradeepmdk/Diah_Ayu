@@ -29,13 +29,13 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close [disabled]="submitting()">Cancel</button>
+  <button mat-button mat-dialog-close [disabled]="submitting">Cancel</button>
   <button 
     mat-raised-button 
     color="primary" 
-    [disabled]="messageForm.invalid || submitting()" 
+    [disabled]="messageForm.invalid || submitting" 
     (click)="submitForm()">
-    @if (!submitting()) {
+    @if (!submitting) {
       Submit
     } @else {
       <mat-spinner diameter="20" class="button-spinner"></mat-spinner>

@@ -12,6 +12,8 @@ import { MessagesStore } from '../../../../../core/store/messages.store';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSortModule } from '@angular/material/sort';
+import { Subject, takeUntil } from 'rxjs';
+import { MessagesFacade } from '../../../../../core/store/messages.facade';
 
 @Component({
   selector: 'app-messages',
@@ -31,27 +33,33 @@ import { MatSortModule } from '@angular/material/sort';
   styleUrl: './messages.component.scss',
 })
 export class MessagesComponent implements OnInit, OnDestroy {
-  private messagesStore = inject(MessagesStore);
-  loading = this.messagesStore.loading;
+  loading = false;
   displayedColumns: string[] = ['id', 'email', 'message', 'date'];
   dataSource = new MatTableDataSource<any>([]);
   
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-
-  constructor(private dialog: MatDialog) {
-    effect(() => {
-      this.dataSource.data = this.messagesStore.messages();
-      console.log(this.dataSource.data);
-      setTimeout(() => {
+  private destroy$ = new Subject<void>();
+  
+  constructor(private dialog: MatDialog, private messagesFacade: MessagesFacade) {
+    this.messagesFacade.messages$
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(messages => {
+      this.dataSource.data = messages;
+      setTimeout(() => { 
         if (this.paginator) {
           this.dataSource.paginator = this.paginator;
         }
-      });
+      })
+    });
+    this.messagesFacade.loading$
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(loading => {
+      this.loading = loading;
     });
   }
 
   ngOnInit(): void {
-    this.messagesStore.loadMessages();
+    this.messagesFacade.loadMessages();
   }
 
   ngAfterViewInit() {
@@ -59,7 +67,9 @@ export class MessagesComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.messagesStore.cleanup();
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.messagesFacade.cleanup();
   }
 
   openDialog(): void {
@@ -71,7 +81,6 @@ export class MessagesComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         console.log('Form submitted:', result);
-        // Handle form submission here
       }
     });
   }
